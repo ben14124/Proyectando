@@ -122,19 +122,19 @@ void loop(){
  }
  
  if(retornoTag == 1){
-   Serial.write(81);
+   Serial.write(61);
  }
  
-  if(retornoTag == 2){
+  else if(retornoTag == 2){
    Serial.write(82);
  }
  
-  if(retornoTag == 3){
-   Serial.write(83);
+  else if(retornoTag == 3){
+   Serial.write(93);
  }
  
-  if(retornoTag == 4){
-   Serial.write(84);
+  else if(retornoTag == 4){
+   Serial.write(34);
  }
  
  //Lectura de los sensores PIR
@@ -359,17 +359,17 @@ int leerTag(){
           retorno = 1;
         }
         
-        if (contador[1]==6){
+        else if (contador[1]==6){
           Serial.print("Lentes");
           retorno = 2;
         }
         
-        if (contador[2]==6){
+        else if (contador[2]==6){
           Serial.print("Reloj");
           retorno = 3;
         }
         
-        if (contador[3]==6){
+        else if (contador[3]==6){
           Serial.print("Computadora");
           retorno = 4;
         }
