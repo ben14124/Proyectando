@@ -81,10 +81,15 @@ color base4 = blanco;
 color base5 = blanco;
 color base6 = blanco;
 
+color color10 =  rojo;
+color color11 =  rojo;
+color color12 =  rojo;
+color color13 =  rojo;
+
 void setup(){
-  size(600,600); //tamano de la ventana
+  size(800,600); //tamano de la ventana
   String portName = Serial.list()[2];
-  myPort = new Serial(this, portName, 50000);
+  myPort = new Serial(this, portName, 115200);
   //myPort.bufferUntil();
   //Arduino = new Serial(this, portName, 9600);
 
@@ -147,6 +152,20 @@ void draw(){
   rect(pos5,370.5,55.75,35,10); //5 
   //rect(pos6,430.5,55.75,35,10); //6 
   
+  fill(color10); //rojo
+  rect(600,130.5,91.5,35,10); //1
+  
+  fill(color11); //rojo
+  rect(600,230.5,91.5,35,10); //1
+  
+  fill(color12); //rojo
+  rect(600,330.5,91.5,35,10); //1
+  
+  fill(color13); //rojo
+  rect(600,430.5,91.5,35,10); //1
+  
+  
+  
   //iOlvide
   fill(250); //color
   textSize(45); //tamanio
@@ -201,7 +220,7 @@ void draw(){
     //Si se recibio el dato del PIR 1
     if ((valrecibido == 8) || (valrecibido == 80)){
       valores[0] = valrecibido;
-      if (valores[0] == 4){
+      if (valores[0] == 8){
          color3=verde;
          pos3=on;
          estadoLED1 = true;
@@ -242,6 +261,21 @@ void draw(){
         estadoLED2 = false;
         base4 = blanco;
       }
+    }
+    else if (valrecibido==81){
+      color10 = verde;
+    }
+    
+    else if (valrecibido==82){
+      color11 = verde;
+    }
+    
+    else if (valrecibido==83){
+      color12 = verde;
+    }
+    
+    else if (valrecibido==84){
+      color13 = verde;
     }
     //Si se recibio el dato del PIR 3
     else if ((valrecibido == 3) || (valrecibido == 30)){
@@ -294,12 +328,16 @@ void draw(){
       println("alertas " + j + " es " + alertas[j]);
     }
     
+    
+    
     //LED 1
     if (alertas[0] == 12){
       println("LED1 lleva mas de 10 segundos encendido");
       base3 = amarillo;
       //Accion
     }
+    
+    
     
     else if (alertas[0] == 11){
       base3 = blanco;
