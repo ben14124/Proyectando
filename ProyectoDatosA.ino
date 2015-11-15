@@ -157,8 +157,6 @@ void loop(){
     digitalWrite(ledPin2, HIGH);  // turn LED ON
     
     if (estadoLED2 == false) {
-      // we have just turned on
-      //Serial.write(1);
       // We only want to print on the output change, not state
       estadoLED2 = true;
     }
@@ -186,14 +184,14 @@ void loop(){
   }
   
   if ((valores[3] == 40) && (estadoFlujo == false)){
-   // SensorFlujo();
+    SensorFlujo();
   }
   else if ((valores[3] == 4) && (estadoFlujo == true)){
     unsigned long currentMillis = millis();
     if(currentMillis - previousMillis > interval) {
       // save the last time you blinked the LED 
       previousMillis = currentMillis;   
-      //SensorFlujo();
+      SensorFlujo();
     }
   }  
   
