@@ -24,6 +24,8 @@ boolean estadoLED1 = false;
 boolean estadoLED2 = false;
 boolean estadoLED3 = false;
 
+PrintWriter output;
+
 int mandar;
 //colores switches
 //-inferiores
@@ -90,9 +92,7 @@ void setup(){
   size(800,600); //tamano de la ventana
   String portName = Serial.list()[2];
   myPort = new Serial(this, portName, 115200);
-  //myPort.bufferUntil();
-  //Arduino = new Serial(this, portName, 9600);
-
+  output = createWriter("datosCasa.txt"); 
 }
 
 void draw(){
@@ -163,8 +163,6 @@ void draw(){
   
   fill(color13); //rojo
   rect(600,430.5,91.5,35,10); //1
-  
-  
   
   //iOlvide
   fill(250); //color
@@ -240,30 +238,34 @@ void draw(){
         base3 = blanco;
       }
     }
-    
+    //  LED1
     if ((valrecibido == 5) || (valrecibido == 50)){
       valores[4] = valrecibido;
       if (valores[4] == 5){
+         output.println("LED1 On");  // Write the coordinate to the file
          color3=verde;
          pos3=on;
          estadoLED1 = true;
       }
       else {
+        output.println("LED1 On");  // Write the coordinate to the file
         color3=rojo;
         pos3=off;
         estadoLED1 = false;
         base3 = blanco;
       }
     }
-    //Si se recibio el dato del PIR 2
+    //LED2
     else if ((valrecibido == 2) || (valrecibido == 20)){
       valores[1] = valrecibido;
       if (valores[1] == 2){
+         output.println("LED2 On");  // Write the coordinate to the file
          color4=verde;
          pos4=on;
          estadoLED2 = true;
       }
       else {
+        output.println("LED2 Off");  // Write the coordinate to the file
         color4=rojo;
         pos4=off;
         estadoLED2 = false;
@@ -285,15 +287,17 @@ void draw(){
     else if (valrecibido==34){
       color13 = verde;
     }
-    //Si se recibio el dato del PIR 3
+    //LED3
     else if ((valrecibido == 3) || (valrecibido == 30)){
       valores[2] = valrecibido;
       if (valores[2] == 3){
+       output.println("LED3 Off");  // Write the coordinate to the file
        color5=verde;
        pos5=on;
        estadoLED3 = true;
       }
       else {
+      output.println("LED3 On");  // Write the coordinate to the file
       color5=rojo;
       pos5=off;
       estadoLED3 = false;
@@ -304,10 +308,12 @@ void draw(){
     else if ((valrecibido == 4) || (valrecibido == 40)){
       valores[3] = valrecibido;
       if (valores[3] == 4){
+       output.println("Flujo On");  // Write the coordinate to the file
        color2=verde;
        pos2=on;
       }
       else {
+      output.println("Flujo Off");  // Write the coordinate to the file
       color2=rojo;
       pos2=off;
       }
@@ -444,4 +450,11 @@ void mouseClicked(){
   if((mouseX>318)&&(mouseX<419)&&(mouseY>425.5)&&(mouseY<470.5)){
   }
    
+}
+
+void keyPressed() {
+  output.flush();  // Writes the remaining data to the file
+  output.println("4");
+  output.close();  // Finishes the file
+  exit();  // Stops the program
 }
