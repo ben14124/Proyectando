@@ -316,7 +316,7 @@ void draw(){
     //Alertas
     
     if ((valrecibido == 11) || (valrecibido == 12)){
-     // alertas[0] = valrecibido;
+      alertas[0] = valrecibido;
     }
     
     if ((valrecibido == 21) || (valrecibido == 22)){
@@ -355,7 +355,7 @@ void draw(){
     }
     
     //LED2
-    else if (alertas[1] == 22){
+    if (alertas[1] == 22){
       base4 = amarillo;
       println("LED2 lleva mas de 10 segundos encendido");
       //Accion
@@ -367,12 +367,12 @@ void draw(){
     }
     
     //LED3
-    else if (alertas[2] == 32){
+    if (alertas[2] == 32){
       base5 = amarillo;
       println("LED3 lleva mas de 10 segundos encendido");
       //Accion
     }
-    
+  
     else if (alertas[2] == 31){
       base5 = blanco;
       //Si modificaron algo por dejarlo encendido, lo tienen que regresar cuando se apague
