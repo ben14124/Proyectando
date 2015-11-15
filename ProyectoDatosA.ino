@@ -1,5 +1,5 @@
 //===================================================
-//Juan Dieog Benitez Caceres
+//Juan Diego Benitez Caceres
 //Carne 14124
 //María Belén Hernández Batres
 //Carne14361
@@ -27,6 +27,9 @@ float rpm1=0;
 unsigned long lastmillis1 = 0;
 long previousMillis = 0;        // will store last time LED was updated
 long interval = 1000;           // interval at which to blink (milliseconds)
+long distancia;
+long tiempo;
+int estadoNFC = 0;
 
 
 boolean estadoLED1;
@@ -62,8 +65,9 @@ NfcAdapter nfc = NfcAdapter(pn532_i2c);
 #endif
 
 void setup() {
- Serial.begin(50000); //Processing tambien esta a 9600 para que esten sincronizados
+ Serial.begin(115200); //Processing tambien esta a 9600 para que esten sincronizados
   //Ponemos los output de los leds
+ nfc.begin();
  pinMode(ledPin, OUTPUT);
  pinMode(ledPin2, OUTPUT);
  pinMode(ledPin3, OUTPUT);
@@ -71,6 +75,8 @@ void setup() {
  pinMode(PIR1, INPUT);
  pinMode(PIR2, INPUT);
  pinMode(PIR3, INPUT);
+ pinMode(40, OUTPUT); /*activación del pin 40 como salida: para el pulso ultrasónico*/
+ pinMode(41, INPUT); /*activación del pin 41 como entrada: tiempo del rebote del ultrasonido*/
  valores[3] = 40;
  attachInterrupt(0, rpm_fan1, FALLING);//interrupt cero (0) is on pin 2. FALLING for when the pin goes from high to low.
 
@@ -108,7 +114,28 @@ void loop(){
    estadoLED3 = true;
  }
  
- leerTag();
+ int estadoTag = ultrasonico();
+ //int estadoTag = 0;
+ int retornoTag = 0;
+ if (estadoTag == 1){
+  retornoTag = leerTag();
+ }
+ 
+ if(retornoTag == 1){
+   Serial.write(81);
+ }
+ 
+  if(retornoTag == 2){
+   Serial.write(82);
+ }
+ 
+  if(retornoTag == 3){
+   Serial.write(83);
+ }
+ 
+  if(retornoTag == 4){
+   Serial.write(84);
+ }
  
  //Lectura de los sensores PIR
  val = digitalRead(PIR1);  // read input value
@@ -159,19 +186,16 @@ void loop(){
   }
   
   if ((valores[3] == 40) && (estadoFlujo == false)){
-    //SensorFlujo();
+   // SensorFlujo();
   }
   else if ((valores[3] == 4) && (estadoFlujo == true)){
     unsigned long currentMillis = millis();
     if(currentMillis - previousMillis > interval) {
       // save the last time you blinked the LED 
       previousMillis = currentMillis;   
-     // SensorFlujo();
+      //SensorFlujo();
     }
-  }
-
-  
-  
+  }  
   
   //Guardado de datos en el arreglo a mandar:
   //PIR 1
@@ -197,6 +221,7 @@ void loop(){
   }
   
   for(int i=0;i<4;i++){
+    //Serial.print(valores[i]);
     Serial.write(valores[i]);
   }
   
@@ -204,9 +229,8 @@ void loop(){
   //Alertas
   if(estadoLED1 == true){
   tiempoLED1++;
-  Serial.println(tiempoLED1);
+  //Serial.println(tiempoLED1);
     if (tiempoLED1 == 100){
-      Serial.println("Llegueee");
       alertas[0] = 12; //siento que se puede confundir con un 1..
     }
   }
@@ -217,9 +241,9 @@ void loop(){
   
   if(estadoLED2 == true){
   tiempoLED2++;
-  Serial.println(tiempoLED2);
+  //Serial.println(tiempoLED2);
     if (tiempoLED2 == 100){
-      Serial.println("Llegueee");
+      //Serial.println("Llegueee");
       alertas[1] = 22;
     }
   }
@@ -230,9 +254,9 @@ void loop(){
   //Este esta fallando por alguna razon.
   if(estadoLED3 == true){
   tiempoLED3++;
-  Serial.println(tiempoLED3);
+  //Serial.println(tiempoLED3);
     if (tiempoLED2 == 100){
-      Serial.println("Llegueee");
+      //Serial.println("Llegueee");
       alertas[2] = 32;
     }
   }
@@ -245,6 +269,7 @@ void loop(){
   for(int j=0;j<4;j++){
     Serial.write(alertas[j]);
   }
+  
   
 }
 
@@ -268,12 +293,13 @@ void SensorFlujo(){
     estadoFlujo = false; //no hay movimiento en el sensor
    }
    //Serial.print("GPH1 =\t"); //print the word "GPH1" and tab.
-   Serial.println(rpm1); // print the GPH value.  
+   //Serial.println(rpm1); // print the GPH value.  
    //Serial.println("..........................");  
    rpmcontador = 0; // Restart the RPM counter
 }
 
-void leerTag(){
+int leerTag(){
+  int retorno = 0;
   if (nfc.tagPresent())
   {
     NfcTag tag = nfc.read();
@@ -284,12 +310,7 @@ void leerTag(){
     {
 
       NdefMessage message = tag.getNdefMessage();
-      message.getRecordCount();
-      
-      if (message.getRecordCount() != 1) {
-
-      }
-
+     message.getRecordCount();
 
       // cycle through the records, printing some info from each
       int recordCount = message.getRecordCount();
@@ -306,25 +327,77 @@ void leerTag(){
         int payloadLength = record.getPayloadLength();
         byte payload[payloadLength];
         record.getPayload(payload);
-
-        // Print the Hex and Printable Characters
-        //Serial.print("  Payload (HEX): ");
-        //PrintHexChar(payload, payloadLength);
-
-        // Force the data into a String (might work depending on the content)
-        // Real code should use smarter processing
-        String payloadAsString = "";
-        for (int c = 0; c < payloadLength; c++) {
-          payloadAsString += (char)payload[c];
+        
+        byte celular[] = {0x00,0x43,0x65,0x6C,0x75,0x6C,0x61,0x72};
+        byte lentes[] = {0x00,0x4C,0x65,0x6E,0x74,0x65,0x73,0x20,0x61,0x6E,0x74,0x65,0x6F,0x6A,0x6F,0x73};
+        byte reloj[] = {0x00,0x52,0x65,0x6C,0x6F,0x6A};
+        byte computadora[] = {0x00,0x43,0x6F,0x6D,0x70,0x75,0x74,0x61,0x64,0x6F,0x72,0x61};
+        int contador[] = {0,0,0,0};
+        
+        
+        //00 43 65 6C 75 6C 61 72
+        for(int x = 0; x<6; x++){
+          if (payload[x] == celular[x]){
+            contador[0]++;            
+          }
+          
+          if (payload[x] == lentes[x]){
+            contador[1]++;            
+          }
+          
+          if (payload[x] == reloj[x]){
+            contador[2]++;            
+          }
+          
+          if (payload[x] == computadora[x]){
+            contador[3]++;            
+          }
+          
         }
-        Serial.println(payloadAsString);
-        // id is probably blank and will return ""
-        String uid = record.getId();
-        if (uid != "") {
-          Serial.print("  ID: ");Serial.println(uid);
+        if (contador[0]==6){
+          Serial.print("Celulashh");
+          retorno = 1;
         }
+        
+        if (contador[1]==6){
+          Serial.print("Lentes");
+          retorno = 2;
+        }
+        
+        if (contador[2]==6){
+          Serial.print("Reloj");
+          retorno = 3;
+        }
+        
+        if (contador[3]==6){
+          Serial.print("Computadora");
+          retorno = 4;
+        }
+
       }
     }
   }
+  delay(100);
+  return retorno;
  // delay(3000);
+}
+
+
+
+int ultrasonico(){
+  digitalWrite(40,LOW); /* Por cuestión de estabilización del sensor*/
+  delayMicroseconds(5);
+  digitalWrite(40, HIGH); /* envío del pulso ultrasónico*/
+  delayMicroseconds(10);
+  tiempo=pulseIn(41, HIGH); /* Función para medir la longitud del pulso entrante. Mide el tiempo que transcurrido entre el envío
+  del pulso ultrasónico y cuando el sensor recibe el rebote, es decir: desde que el pin 12 empieza a recibir el rebote, HIGH, hasta que
+  deja de hacerlo, LOW, la longitud del pulso entrante*/
+  distancia= int(0.017*tiempo); /*fórmula para calcular la distancia obteniendo un valor entero*/
+  if(distancia<=13){
+    estadoNFC = 1;
+  }
+  else {
+    estadoNFC = 0;
+  }
+  return estadoNFC;
 }
