@@ -201,19 +201,27 @@ void draw(){
   textSize(15); //tamanio
   text(puerta,200,449.5); //posicion
   
-  //Lectura de datos recibidos desde el arduino
+  //Celular
+  fill(0); //color
+  textSize(15); //tamanio
+  text("CELULAR",615,152.5); //posicion  
   
-      /*String inBuffer = myPort.readString();   
-      iolvide = inBuffer;
-      if (inBuffer != null) {
-        println(inBuffer);
-        if(inBuffer.indexOf("Hola Daniela") >= 0){
-          color6 = amarillo;
-        }
-        if(inBuffer.indexOf("2") >= 0){
-          color6 = rojo;
-        }
-      }*/  
+  //Lentes
+  fill(0); //color
+  textSize(15); //tamanio
+  text("LENTES",615,252.5); //posicion    
+  
+  //Reloj
+  fill(0); //color
+  textSize(15); //tamanio
+  text("RELOJ",615,352.5); //posicion      
+  
+    //Compu
+  fill(0); //color
+  textSize(15); //tamanio
+  text("LAPTOP",615,450); //posicion  
+  
+  //Lectura de datos recibidos desde el arduino
   
   if (myPort.available()>0) { //Si hay datos disponibles
     int valrecibido = myPort.read();
@@ -262,7 +270,7 @@ void draw(){
         base4 = blanco;
       }
     }
-    else if (valrecibido==81){
+    else if (valrecibido==61){
       color10 = verde;
     }
     
@@ -270,11 +278,11 @@ void draw(){
       color11 = verde;
     }
     
-    else if (valrecibido==83){
+    else if (valrecibido==93){
       color12 = verde;
     }
     
-    else if (valrecibido==84){
+    else if (valrecibido==34){
       color13 = verde;
     }
     //Si se recibio el dato del PIR 3
@@ -323,6 +331,8 @@ void draw(){
     for (int i = 0; i<6; i++){
       println("valores " + i + " es " + valores[i]);
     }
+    
+    println("Valor recibido: " + valrecibido);
     
     for (int j = 0; j<4; j++){
       println("alertas " + j + " es " + alertas[j]);
