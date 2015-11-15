@@ -225,7 +225,6 @@ void loop(){
     Serial.write(valores[i]);
   }
   
-  
   //Alertas
   if(estadoLED1 == true){
   tiempoLED1++;
