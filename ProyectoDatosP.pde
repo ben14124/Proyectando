@@ -70,8 +70,9 @@ String luz3 = "Luz cocina";
 String puerta = "Puerta abierta";
 float posX = 370.5;
 float posiX = 175.5;
-int[] valores=new int[6];
-int[] alertas=new int[4];
+int[] valores = new int[6];
+int[] alertas = new int[4];
+int[] tags = new int[4];
 
 //Colores para los cuadros con texto
 color amarillo = color(255,255,10);
@@ -103,10 +104,11 @@ void draw(){
   //Rectangulo grande
   fill (250);
   rect(150,100,300,400,20);
+  //Rectangulo grande
+  fill (250);
+  rect(595,100,100,400,20);  
 
   //Rectangulos de cada apartado
-  fill(base1);
-  rect(175.5,121.5,249,53,10); //1
   fill(base2);
   rect(175.5,181.5,249,53,10); //2
   fill(base3);
@@ -115,22 +117,16 @@ void draw(){
   rect(175.5,301.5,249,53,10); //4
   fill(base5);
   rect(175.5,361.5,249,53,10); //5
-  fill(base6);
-  rect(175.5,421.5,249,53,10); //6
   
   //Bases switches*/
   strokeWeight(1);
   fill(color(250));
-  rect(318,125.5,101,45,10); //1
   rect(318,185.5,101,45,10); //2
   rect(318,245.5,101,45,10); //3
   rect(318,305.5,101,45,10); //4
   rect(318,365.5,101,45,10); //5
-  rect(318,425.5,101,45,10); //6
   
   //Slot switches
-  fill(color1); //rojo
-  rect(323,130.5,91.5,35,10); //1
   fill(color2);
   rect(323,190.5,91.5,35,10); //2
   fill(color3);
@@ -139,18 +135,14 @@ void draw(){
   rect(323,310.5,91.5,35,10); //4 
   fill(color5);
   rect(323,370.5,91.5,35,10); //5 
-  fill(color6);
-  rect(323,430.5,91.5,35,10); //6 
   
   //Switches
   //para mover el switch se suma 35.75
   fill(color(250));
-  rect(pos1,130.5,55.75,35,10); //1
   //rect(pos2,190.5,55.75,35,10); //2 regadera
   rect(pos3,250.5,55.75,35,10); //3
   rect(pos4,310.5,55.75,35,10); //4 
   rect(pos5,370.5,55.75,35,10); //5 
-  //rect(pos6,430.5,55.75,35,10); //6 
   
   fill(color10); //rojo
   rect(600,130.5,91.5,35,10); //1
@@ -167,12 +159,7 @@ void draw(){
   //iOlvide
   fill(250); //color
   textSize(45); //tamanio
-  text(iolvide,217.5,75); //posicion
-
-  //tele
-  fill(0); //color
-  textSize(20); //tamanio
-  text(tele,200,152.5); //posicion
+  text(iolvide,300.5,75); //posicion
   
     //regadera
   fill(0); //color
@@ -193,11 +180,7 @@ void draw(){
   fill(0); //color
   textSize(20); //tamanio
   text(luz3,200,392.5); //posicion
-  
-    //puerta
-  fill(0); //color
-  textSize(15); //tamanio
-  text(puerta,200,449.5); //posicion
+ 
   
   //Celular
   fill(0); //color
@@ -248,7 +231,7 @@ void draw(){
          estadoLED1 = true;
       }
       else {
-        output.println("LED1 On");  // Write the coordinate to the file
+        output.println("LED1 Off");  // Write the coordinate to the file
         color3=rojo;
         pos3=off;
         estadoLED1 = false;
@@ -274,18 +257,22 @@ void draw(){
     }
     else if (valrecibido==61){
       color10 = verde;
+      tags[0] = 1;
     }
     
     else if (valrecibido==82){
       color11 = verde;
+      tags[1] = 1;
     }
     
     else if (valrecibido==93){
       color12 = verde;
+      tags[2] = 1;
     }
     
     else if (valrecibido==34){
       color13 = verde;
+      tags[3] = 1;
     }
     //LED3
     else if ((valrecibido == 3) || (valrecibido == 30)){
@@ -344,7 +331,17 @@ void draw(){
       println("alertas " + j + " es " + alertas[j]);
     }
     
+    int cuentaTags = 0;
     
+    for (int k = 0; k<4; k++){
+      if(tags[k]==1){
+        cuentaTags++;
+      }
+    }
+    
+    if(cuentaTags==4){
+      iolvide = "TAGS";
+    }
     
     //LED 1
     if (alertas[0] == 12){
@@ -352,8 +349,6 @@ void draw(){
       base3 = amarillo;
       //Accion
     }
-    
-    
     
     else if (alertas[0] == 11){
       base3 = blanco;
@@ -390,12 +385,6 @@ void draw(){
 }
 
 void mouseClicked(){
-  //television
-  if((mouseX>318)&&(mouseX<419)&&(mouseY>125.5)&&(mouseY<170.5)){
-  }
-  //regadera
-  if((mouseX>318)&&(mouseX<419)&&(mouseY>185.5)&&(mouseY<230.5)){
-  }
   
   //Switch luz cuarto
   if((mouseX>318)&&(mouseX<419)&&(mouseY>245.5)&&(mouseY<290.5)){
@@ -410,7 +399,6 @@ void mouseClicked(){
        myPort.write(5); //este 20 en el arduino significa que
     }
 
-     //-----myPort.clear(); //limpiamos el bufer
    }
    
 
@@ -426,7 +414,6 @@ void mouseClicked(){
        println("Encendiendo LED2");
        myPort.write(2); //este 20 en el arduino significa que
     }    
-     //-----myPort.clear(); //limpiamos el bufer
    }
    
 
@@ -443,7 +430,6 @@ void mouseClicked(){
        myPort.write(3); //este 20 en el arduino significa que
     }
     
-     //-----myPort.clear(); //limpiamos el bufer
    }
    
    //Puerta abierta
