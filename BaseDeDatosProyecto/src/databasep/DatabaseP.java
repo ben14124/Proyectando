@@ -36,14 +36,34 @@ public class DatabaseP {
      */
     public static void main(String[] args) throws SQLException{
         
+        System.out.println("Esperando registro...");
+        
         File fileCasa= new File ("datosCasa.txt");
         int cuarto= 0;
         int sala= 0;
         int cocina= 0;
         int flujo= 0;
         List<Dia> dias = null;
+        String verificar = "no";
         
         //Conteo de datos
+        
+            while (!verificar.equals("4")){
+                try{
+                BufferedReader br = new BufferedReader(new FileReader(fileCasa));
+                try { 
+                    for(String line; (line = br.readLine()) != null; ){
+                        verificar=line;
+                    }  
+                }
+                catch(Exception e){
+                }
+            }
+            catch(Exception e){
+
+            }
+        }
+            
         try{
             BufferedReader br = new BufferedReader(new FileReader(fileCasa));
             try { 
@@ -73,6 +93,7 @@ public class DatabaseP {
             
         }
         
+        System.out.println("Registro ingresado exitosamente.");
         //Ingreso de datos del dia
         Dia dia = new Dia();
         dia.setCuarto(cuarto);
@@ -91,6 +112,7 @@ public class DatabaseP {
             System.out.println(ex);
         }
         
+        System.out.println("\nTODOS LOS REGISTROS:");
         //Obtener todas las entradas de la base de datos.
         try {
             dias= sql.recuperarTodas(Conexion.obtener());
@@ -100,11 +122,9 @@ public class DatabaseP {
         for (int x=0; x<dias.size(); x++){
             System.out.println(dias.get(x).toString());
         }
-        
+        System.out.println("\nHOY:");
         //Obtener ultima entrada
         System.out.println(sql.recuperarUltima());
-        
-        
         
     }
     
