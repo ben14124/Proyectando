@@ -26,26 +26,32 @@ public class ConsumoGUI extends javax.swing.JPanel {
     public ConsumoGUI() throws SQLException {
         initComponents();
         
+        //se accesa a la base de datos
         dia= database.recuperarUltima();
         
+        //se obtienen los datos necesarios
         cuarto=dia.getCuarto().floatValue()/25;
         sala=dia.getSala().floatValue()/25;
         cocina=dia.getCocina().floatValue()/25;
         agua=dia.getFlujo().floatValue()/25;
         
+        //se muestran los datos registrados
         tfCuarto.setText(Float.toString(cuarto));
         tfSala.setText(Float.toString(sala));
         tfCocina.setText(Float.toString(cocina));
         tfRegadera.setText(Float.toString(agua));
         
+        //calculo de gastos
         cuarto= (float) (cuarto*(4.12));
         sala= (float) (sala*(4.12));
         cocina= (float) (cocina*(4.12));
         agua= (float) (agua*(10.11));
         
+        //calculo de totales
         luz= cuarto+sala+cocina;
         total=luz+agua;
         
+        //Redondeo a 2 decimales
         cuarto= (float) (Math.round(cuarto *100.0)/100.0);
         sala= (float) (Math.round(sala *100.0)/100.0);
         cocina= (float) (Math.round(cocina *100.0)/100.0);
@@ -53,11 +59,13 @@ public class ConsumoGUI extends javax.swing.JPanel {
         luz= (float) (Math.round(luz *100.0)/100.0);
         total= (float) (Math.round(total *100.0)/100.0);
        
+        //Se muestran los gastos
         tfCuarto1.setText(Float.toString(cuarto));
         tfSala1.setText(Float.toString(sala));
         tfCocina1.setText(Float.toString(cocina));
         tfRegadera1.setText(Float.toString(agua));
         
+        //Se muestran los totales
         labelSuma.setText(Float.toString(luz));
         labelAgua.setText(Float.toString(agua));
         tfTotal.setText(Float.toString(total));
