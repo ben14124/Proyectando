@@ -1,5 +1,5 @@
 //===================================================
-//Juan Diego Benitez Caceres
+//Juan Diego Benítez Cáceres
 //Carne 14124
 //María Belén Hernández Batres
 //Carne14361
@@ -88,6 +88,10 @@ color color10 =  rojo;
 color color11 =  rojo;
 color color12 =  rojo;
 color color13 =  rojo;
+
+color colorTags = rojo;
+
+String salidaTags = " ¡Aún hay objetos\n      en la casa!";
 
 void setup(){
   size(800,600); //tamano de la ventana
@@ -185,22 +189,26 @@ void draw(){
   //Celular
   fill(0); //color
   textSize(15); //tamanio
-  text("CELULAR",615,152.5); //posicion  
+  text("CELULAR",613,152.5); //posicion  
   
   //Lentes
   fill(0); //color
   textSize(15); //tamanio
-  text("LENTES",615,252.5); //posicion    
+  text("LENTES",619,252.5); //posicion    
   
   //Reloj
   fill(0); //color
   textSize(15); //tamanio
-  text("RELOJ",615,352.5); //posicion      
+  text("RELOJ",625,352.5); //posicion      
   
     //Compu
   fill(0); //color
   textSize(15); //tamanio
-  text("LAPTOP",615,450); //posicion  
+  text("LAPTOP",617,454); //posicion  
+  
+  fill(colorTags); //color de las tags
+  textSize(22); //tamanio
+  text(salidaTags,545, 50); //posicion
   
   //Lectura de datos recibidos desde el arduino
   
@@ -339,8 +347,19 @@ void draw(){
       }
     }
     
-    if(cuentaTags==4){
-      iolvide = "TAGS";
+    if(cuentaTags==4){ //Si ya se pasaron todos los objetos por el lector NFC
+      if((valores[1]>10) && (valores[2]>10) && (valores[3]>10) && (valores[4]>10)){ //Si todo esta apagado se indica que ya esta todo para salir
+        salidaTags = "      ¡Todo listo\n       para salir!";
+        colorTags = verde; //Se cambia a color verde el texto de las tags
+      }
+      else { //Si ya se pasaron todas las tags, pero aun hay luces encendidas, se indica.
+        salidaTags = "¡Objetos completos, \n luces encendidas!";
+        colorTags = amarillo;
+      }
+    }
+    else if (cuentaTags!= 4){ //Si aun no se han pasado todas las tags, se indica que aun hay algo olvidado.
+      colorTags = rojo;
+      salidaTags = " ¡Aún hay objetos\n      en la casa!";
     }
     
     //LED 1
