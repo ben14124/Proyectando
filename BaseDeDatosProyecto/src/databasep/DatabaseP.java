@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -36,6 +37,7 @@ public class DatabaseP {
      */
     public static void main(String[] args) throws SQLException{
         
+       
         System.out.println("Esperando registro...");
         
         File fileCasa= new File ("datosCasa.txt");
@@ -126,6 +128,12 @@ public class DatabaseP {
         //Obtener ultima entrada
         System.out.println(sql.recuperarUltima());
         
+        //se inicializa la interfaz grafica
+       JFrame frame = new JFrame(); //se crea un JFrame
+       frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //el frame para que se cierre normalmente
+       frame.getContentPane().add(new ConsumoGUI()); //se agrega el contenido del panel
+       frame.pack(); //empaqueta
+       frame.setVisible(true); //se hace visible
     }
     
 }

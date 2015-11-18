@@ -91,7 +91,7 @@ color color13 =  rojo;
 
 void setup(){
   size(800,600); //tamano de la ventana
-  String portName = Serial.list()[2];
+  String portName = Serial.list()[0];
   myPort = new Serial(this, portName, 115200);
   output = createWriter("datosCasa.txt"); 
 }
@@ -224,36 +224,10 @@ void draw(){
     //  LED1
     if ((valrecibido == 5) || (valrecibido == 50)){
       valores[4] = valrecibido;
-      if (valores[4] == 5){
-         output.println("LED1 On");  // Write the coordinate to the file
-         color3=verde;
-         pos3=on;
-         estadoLED1 = true;
-      }
-      else {
-        output.println("LED1 Off");  // Write the coordinate to the file
-        color3=rojo;
-        pos3=off;
-        estadoLED1 = false;
-        base3 = blanco;
-      }
     }
     //LED2
     else if ((valrecibido == 2) || (valrecibido == 20)){
       valores[1] = valrecibido;
-      if (valores[1] == 2){
-         output.println("LED2 On");  // Write the coordinate to the file
-         color4=verde;
-         pos4=on;
-         estadoLED2 = true;
-      }
-      else {
-        output.println("LED2 Off");  // Write the coordinate to the file
-        color4=rojo;
-        pos4=off;
-        estadoLED2 = false;
-        base4 = blanco;
-      }
     }
     else if (valrecibido==61){
       color10 = verde;
@@ -277,6 +251,44 @@ void draw(){
     //LED3
     else if ((valrecibido == 3) || (valrecibido == 30)){
       valores[2] = valrecibido;
+    }
+    //Si se recibio el dato del sensor de flujo
+    else if ((valrecibido == 4) || (valrecibido == 40)){
+      valores[3] = valrecibido;
+    }
+    
+    //LED1 EN TXT
+    if (valores[4] == 5){
+         output.println("LED1 On");  // Write the coordinate to the file
+         color3=verde;
+         pos3=on;
+         estadoLED1 = true;
+      }
+      else {
+        output.println("LED1 Off");  // Write the coordinate to the file
+        color3=rojo;
+        pos3=off;
+        estadoLED1 = false;
+        base3 = blanco;
+      }
+      
+      //LED 2 EN TXT
+      if (valores[1] == 2){
+         output.println("LED2 On");  // Write the coordinate to the file
+         color4=verde;
+         pos4=on;
+         estadoLED2 = true;
+      }
+      else {
+        output.println("LED2 Off");  // Write the coordinate to the file
+        color4=rojo;
+        pos4=off;
+        estadoLED2 = false;
+        base4 = blanco;
+      }
+      
+      
+      //LED3 EN TXT
       if (valores[2] == 3){
        output.println("LED3 Off");  // Write the coordinate to the file
        color5=verde;
@@ -290,11 +302,10 @@ void draw(){
       estadoLED3 = false;
       base5 = blanco;
       }
-    }
-    //Si se recibio el dato del sensor de flujo
-    else if ((valrecibido == 4) || (valrecibido == 40)){
-      valores[3] = valrecibido;
-      if (valores[3] == 4){
+      
+      
+      //FLUJO EN TXT 
+    if (valores[3] == 4){
        output.println("Flujo On");  // Write the coordinate to the file
        color2=verde;
        pos2=on;
@@ -304,8 +315,9 @@ void draw(){
       color2=rojo;
       pos2=off;
       }
-    }
-    
+      
+      
+      
     //Alertas
     
     if ((valrecibido == 11) || (valrecibido == 12)){

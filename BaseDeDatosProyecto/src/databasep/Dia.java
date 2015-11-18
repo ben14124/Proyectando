@@ -69,6 +69,6 @@ public class Dia {
         this.flujo = flujo;
     }
     public String toString() {
-      return "Dia "+id+"{" +cuarto+"=" + cuarto + ", sala=" + sala + ", cocina=" + cocina + ", flujo=" + flujo + '}';
+      return "Dia "+id+"{cuarto=" + cuarto + ", sala=" + sala + ", cocina=" + cocina + ", flujo=" + flujo + '}';
    } 
 }
